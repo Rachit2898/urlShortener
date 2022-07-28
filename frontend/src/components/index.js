@@ -6,12 +6,11 @@ import ToastService from "react-material-toast";
 import "./index.css";
 
 function Home() {
-  const { urls} = useSelector((state) => ({
-    ...state.app,
-  }));
-
   var websiteFormat =
     /^((https?|ftp|smtp):\/\/)?(www.)?[-a-zA-Z0-9_?]+(\.[a-z%]+)+(\/[_a-zA-Z0-9-.#%?]+\/?)*$/;
+  const { urls } = useSelector((state) => ({
+    ...state.app,
+  }));
 
   const toast = ToastService.new({
     place: "topRight",
@@ -87,7 +86,6 @@ function Home() {
               </tr>
             );
           })}
-          
         </table>
       </>
     );
@@ -102,7 +100,7 @@ function Home() {
             <input
               type="text"
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Enter Post Title"
+              placeholder="Enter Url"
             ></input>
             <button onClick={handleSubmit} type="button">
               Short Link
