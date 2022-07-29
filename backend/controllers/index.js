@@ -1,7 +1,6 @@
-const express = require("express");
-const catchAsyncError = require("../middleware/catchAsyncError");
+
 const Urls = require("../db/model");
-const { count } = require("console");
+
 
 // Generate short URL
 const shortUrlGen = (len) => {
@@ -15,11 +14,14 @@ const shortUrlGen = (len) => {
   return key;
 };
 
-exports.createShortUrl = catchAsyncError(async (req, res) => {
+exports.createShortUrl =async (req, res) => {
   let response = {
     original_url: req.body.url,
     short_url: shortUrlGen(5),
   };
+  if (!response.original_url){
+    return res.status(404).json({error: "Invalid"})
+  }
 
   const responses = await Urls.create(response);
   if (!responses) {
@@ -33,15 +35,18 @@ exports.createShortUrl = catchAsyncError(async (req, res) => {
       responses,
     });
   }
-});
+};
 
-exports.useUrl = catchAsyncError(async (req, res) => {
+exports.useUrl = async (req, res) => {
   let slug = req.params.slug;
+  if (!slug){
+    return res.status(404).json({error: "Invalid"})
+  }
+
 
   const response = await Urls.findOne({
     short_url: slug,
   });
-  console.log(response.clicks);
 
   if (response == null) {
     return res.json({
@@ -50,9 +55,9 @@ exports.useUrl = catchAsyncError(async (req, res) => {
   } else {
     return res.redirect(301, response["original_url"]);
   }
-});
+};
 
-exports.useClicks = catchAsyncError(async (req, res) => {
+exports.useClicks = async (req, res) => {
   let slug = req.body.url;
 
   const response = await Urls.findOne({
@@ -72,9 +77,9 @@ exports.useClicks = catchAsyncError(async (req, res) => {
       response,
     });
   }
-});
+};
 
-exports.getAllUrls = catchAsyncError(async (req, res, next) => {
+exports.getAllUrls = async (req, res, next) => {
   const response = await Urls.find();
 
   if (!response) {
@@ -88,4 +93,4 @@ exports.getAllUrls = catchAsyncError(async (req, res, next) => {
     successCode: 200,
     response,
   });
-});
+};

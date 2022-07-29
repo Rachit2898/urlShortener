@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const connectDatabase =()=>{
-mongoose.connect("mongodb+srv://rachit:12345@cluster0.neale.mongodb.net/?retryWrites=true&w=majority",{
+mongoose.connect("mongodb://localhost:27017/redux",{
 useUnifiedTopology: true 
 }).then(()=>{
     console.log("Connected")

@@ -1,7 +1,6 @@
 
-const catchAsyncError = require("./catchAsyncError")
 
-exports.checkHTTP = catchAsyncError((req, res, next) => {
+exports.checkHTTP = async(req, res, next) => {
 
     if (/(http(s?)):\/\//.test(req.body.url)) {
       return next();
@@ -10,4 +9,4 @@ exports.checkHTTP = catchAsyncError((req, res, next) => {
         error: "invalid url",
       });
     }
-  });
+  };
