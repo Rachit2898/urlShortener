@@ -1,12 +1,17 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
+const path = require("path");
+require("dotenv").config();
 
-const connectDatabase =()=>{
-mongoose.connect("mongodb+srv://rachit:12345@cluster0.neale.mongodb.net/?retryWrites=true&w=majority",{
-useUnifiedTopology: true 
-}).then(()=>{
-    console.log("Connected")
-}).catch(err=>{
-    console.log("Error",err)
-})
-}
-module.exports = connectDatabase
+const connectDatabase = () => {
+  mongoose
+    .connect(process.env.DB_URI, {
+      useUnifiedTopology: true,
+    })
+    .then(() => {
+      console.log(`Connected on ${process.env.DB_URI}`);
+    })
+    .catch((err) => {
+      console.log("Error", err);
+    });
+};
+module.exports = connectDatabase;

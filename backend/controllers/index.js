@@ -1,6 +1,4 @@
-
 const Urls = require("../db/model");
-
 
 // Generate short URL
 const shortUrlGen = (len) => {
@@ -14,15 +12,14 @@ const shortUrlGen = (len) => {
   return key;
 };
 
-exports.createShortUrl =async (req, res) => {
+exports.createShortUrl = async (req, res) => {
   let response = {
     original_url: req.body.url,
     short_url: shortUrlGen(5),
   };
-  if (!response.original_url){
-    return res.status(404).json({error: "Invalid"})
+  if (!response.original_url) {
+    return res.status(404).json({ error: "Invalid" });
   }
-
   const responses = await Urls.create(response);
   if (!responses) {
     return res.json({
@@ -38,45 +35,15 @@ exports.createShortUrl =async (req, res) => {
 };
 
 exports.useUrl = async (req, res) => {
-  let slug = req.params.slug;
-  if (!slug){
-    return res.status(404).json({error: "Invalid"})
+  const short_url = req.params.slug;
+  const response = await Urls.findOne({ short_url });
+  if (!response) {
+    res.status(404).send({ message: "Oops! url not found" });
+    return;
   }
-
-
-  const response = await Urls.findOne({
-    short_url: slug,
-  });
-
-  if (response == null) {
-    return res.json({
-      error: "invalid url",
-    });
-  } else {
-    return res.redirect(301, response["original_url"]);
-  }
-};
-
-exports.useClicks = async (req, res) => {
-  let slug = req.body.url;
-
-  const response = await Urls.findOne({
-    short_url: slug,
-  });
-
-  if (response == null) {
-    return res.json({
-      error: "invalid url",
-    });
-  } else {
-    response.clicks++;
-    response.save();
-    res.status(200).json({
-      success: true,
-      successCode: 200,
-      response,
-    });
-  }
+  response.clicks++;
+  await response.save();
+  res.status(301).redirect(response.original_url);
 };
 
 exports.getAllUrls = async (req, res, next) => {
@@ -87,7 +54,6 @@ exports.getAllUrls = async (req, res, next) => {
       error: "No urls",
     });
   }
-
   res.status(200).json({
     success: true,
     successCode: 200,

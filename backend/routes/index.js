@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.route("/createUrl").post(checkHTTP,createShortUrl);
 router.route("/shortUrl/:slug").get(useUrl);
-router.route("/clicks").post(useClicks);
 router.route("/getAllUrls").get(getAllUrls)
 
 

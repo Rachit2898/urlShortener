@@ -6,18 +6,6 @@ export const getUrls = createAsyncThunk("urls/getUrls", async () => {
   );
 });
 
-export const getClicks = createAsyncThunk(
-  "click/getClick",
-  async ({ data }) => {
-    return fetch(`http://localhost:3001/api/v1/clicks`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ url: data }),
-    }).then((res) => res.json());
-  }
-);
 
 export const createUrls = createAsyncThunk("url/createUrls", async (values) => {
   return fetch(`http://localhost:3001/api/v1/createUrl`, {
@@ -29,18 +17,19 @@ export const createUrls = createAsyncThunk("url/createUrls", async (values) => {
   }).then((res) => res.json());
 });
 
+export const getClicks= createAsyncThunk("url/createUrls", async (values) => {
+  console.log("getClicks", values)
+  return fetch(`http://localhost:3001/api/v1/shortUrl/${values}`, {
+  
+  }).then((res) => res.json());
+});
+
 const UrlSlice = createSlice({
   name: "url",
   initialState: {
     loading: false,
     urls: [],
-    clicks: [
-      {
-        response: {
-          clicks: 0,
-        },
-      },
-    ],
+    error: false
   },
   extraReducers: {
     [getUrls.pending]: (state, action) => {
@@ -52,18 +41,7 @@ const UrlSlice = createSlice({
     },
     [getUrls.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.payload;
-    },
-    [getClicks.pending]: (state, action) => {
-      state.loading = true;
-    },
-    [getClicks.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.clicks = [action.payload];
-    },
-    [getClicks.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
+      state.error = true;
     },
   },
 });

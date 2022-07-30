@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUrls, createUrls, getClicks } from "../redux/features/urlSlice";
+import { Oval } from "react-loader-spinner";
 
 import ToastService from "react-material-toast";
 import "./index.css";
@@ -29,6 +30,8 @@ function Home() {
   const dispatch = useDispatch();
   const [value, setValue] = useState();
   const [response, setResponse] = useState();
+  const [toggleUrl, setToggleUrl] = useState();
+  const [isLoading, setLoading] = useState();
   const [showUrls] = useState(true);
 
   const handleSubmit = (e) => {
@@ -49,13 +52,18 @@ function Home() {
     apiSuccessToast("Short link Created");
   };
 
-  const clickHandler = async (url) => {
-    dispatch(getClicks({ data: url }));
+  const clickHandler = () => {
+    setToggleUrl((pre) => !pre);
   };
 
   useEffect(() => {
-    dispatch(getUrls());
-  }, [dispatch, response]);
+    setLoading(true);
+    setTimeout(() => {
+      dispatch(getUrls());
+      setToggleUrl();
+      setLoading(false);
+    }, 500);
+  }, [response, toggleUrl]);
 
   const showUrl = () => {
     return (
@@ -73,7 +81,7 @@ function Home() {
                 <td>{val.original_url}</td>
                 <a
                   onClick={() => {
-                    clickHandler(val.short_url);
+                    clickHandler();
                   }}
                   href={`http://localhost:3001/api/v1/shortUrl/${val.short_url}`}
                   target="_blank"
@@ -106,7 +114,16 @@ function Home() {
               Short Link
             </button>
           </div>
-          <div className="table-div">{showUrls && <div>{showUrl()}</div>}</div>
+
+          <div className="table-div">
+            {isLoading ? (
+              <div className="loader">
+                <Oval></Oval>
+              </div>
+            ) : (
+              <div>{showUrl()}</div>
+            )}
+          </div>
         </div>
       </div>
     </div>
