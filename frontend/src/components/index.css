@@ -49,7 +49,8 @@
 .div-Input {
   display: flex;
   flex-direction: row;
-  margin: 10px 560px;
+  margin-left: 25%;
+  margin-right: 25%;
 }
 .div-Input > input {
   height: 30px;
@@ -84,5 +85,19 @@
 }
 
 .loader {
-  margin-left: 800px;
+  display: flex !important;
+  flex-direction: column;
+  margin-left: 40%;
+  margin-top: 5%;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  margin-left: 35%;
+  margin-right: 40%;
+}
+.heading > p {
+  font: 2rem sans-serif;
+  font-weight: bold;
 }

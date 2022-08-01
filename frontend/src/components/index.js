@@ -48,7 +48,8 @@ function Home() {
 
       return;
     }
-    setResponse(dispatch(createUrls(data)));
+    dispatch(createUrls(data));
+    setResponse((pre) => !pre);
     apiSuccessToast("Short link Created");
   };
 
@@ -102,8 +103,11 @@ function Home() {
   return (
     <div className="home-screen">
       <div className="Div-1">
-        <h1>MY URL SHORTENER</h1>
-        <div>
+        <div className="heading">
+          <p>URL SHORTENER</p>
+        </div>
+
+        <div className="Div-2">
           <div className="div-Input">
             <input
               type="text"
